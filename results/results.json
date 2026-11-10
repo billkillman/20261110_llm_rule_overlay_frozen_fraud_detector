@@ -1,0 +1,177 @@
+{
+ "primary_metric": "delta_recall_at_precision",
+ "direction": "max",
+ "metric_labels": {
+  "delta_recall_at_precision": "ΔR@P (points, vs cibles de production)",
+  "delta_precision_at_recall": "ΔP@R (points, vs cibles de production)",
+  "average_precision": "Précision moyenne (AP)",
+  "rules_kept_rate": "Part des règles gardées",
+  "invalid_rule_rate": "Part des règles invalides",
+  "score_rank_correlation_with_frozen": "Corrélation de rang avec le gelé"
+ },
+ "dataset": {
+  "name": "jAEhEEkIM/operationbench-baf-raw",
+  "config": "default",
+  "split": "fenêtre d'évaluation (périodes finales)",
+  "n_examples": 36037
+ },
+ "approaches": [
+  {
+   "name": "XGBoost gelé",
+   "role": "reference",
+   "metrics": {
+    "delta_recall_at_precision": 1.0463378176382663,
+    "delta_precision_at_recall": 0.09695860212701932,
+    "average_precision": 0.07643063849117183,
+    "rules_kept_rate": null,
+    "invalid_rule_rate": null,
+    "score_rank_correlation_with_frozen": null
+   },
+   "ci95": {
+    "average_precision": [
+     0.06445861771806292,
+     0.09498452353959842
+    ],
+    "delta_recall_at_precision": [
+     0.0,
+     4.763993316624898
+    ],
+    "delta_precision_at_recall": [
+     0.08641475856496446,
+     0.5710495487091516
+    ]
+   },
+   "latency_ms": {
+    "p50": 1.85,
+    "p95": 2.6,
+    "n": 20.0
+   },
+   "notes": "50 arbres, appris sur la 1re fenêtre puis gelé"
+  },
+  {
+   "name": "Règles par arbre",
+   "role": "reference",
+   "metrics": {
+    "delta_recall_at_precision": -0.5231689088191323,
+    "delta_precision_at_recall": -0.7584586671901771,
+    "average_precision": 0.07844389333675938,
+    "rules_kept_rate": 0.5,
+    "invalid_rule_rate": null,
+    "score_rank_correlation_with_frozen": 0.9582061966950759
+   },
+   "ci95": {
+    "average_precision": [
+     0.06604986345667815,
+     0.09855178999151949
+    ],
+    "delta_recall_at_precision": [
+     -4.085318001910743,
+     3.7957256130063963
+    ],
+    "delta_precision_at_recall": [
+     -2.2616905687743567,
+     1.7158557494758913
+    ]
+   },
+   "latency_ms": {
+    "p50": 2.0,
+    "p95": 2.06,
+    "n": 20.0
+   },
+   "notes": "arbre de profondeur 3, 4 règles gardées ; ΔR@P apparié vs gelé -1.57 pt [-5.46 ; +0.97]"
+  },
+  {
+   "name": "Réentraînement pondéré",
+   "role": "reference",
+   "metrics": {
+    "delta_recall_at_precision": -0.6726457399103135,
+    "delta_precision_at_recall": -0.4975030896815072,
+    "average_precision": 0.0750258653755604,
+    "rules_kept_rate": null,
+    "invalid_rule_rate": null,
+    "score_rank_correlation_with_frozen": 0.9324090908633067
+   },
+   "ci95": {
+    "average_precision": [
+     0.06272974665392311,
+     0.09771857624425247
+    ],
+    "delta_recall_at_precision": [
+     -4.519704433497536,
+     2.9317943941387163
+    ],
+    "delta_precision_at_recall": [
+     -1.9382586672140623,
+     1.8674431111545615
+    ]
+   },
+   "latency_ms": {
+    "p50": 1.83,
+    "p95": 1.9,
+    "n": 20.0
+   },
+   "notes": "+10 arbres, fraudes manquées x5 ; ΔR@P apparié vs gelé -1.72 pt [-5.87 ; +0.77]"
+  },
+  {
+   "name": "Surcouche LLM (Qwen/Qwen3-0.6B)",
+   "role": "new",
+   "metrics": {
+    "delta_recall_at_precision": 0.22421524663677103,
+    "delta_precision_at_recall": 0.305695603889416,
+    "average_precision": 0.07746512298725433,
+    "rules_kept_rate": 0.25,
+    "invalid_rule_rate": 0.8,
+    "score_rank_correlation_with_frozen": 0.9994202256926983
+   },
+   "ci95": {
+    "average_precision": [
+     0.06552965975082398,
+     0.09648024802451417
+    ],
+    "delta_recall_at_precision": [
+     -1.4857357357357357,
+     4.981596866209219
+    ],
+    "delta_precision_at_recall": [
+     0.09031614677371118,
+     1.0342733808322182
+    ]
+   },
+   "latency_ms": {
+    "p50": 1.93,
+    "p95": 2.0,
+    "n": 20.0
+   },
+   "notes": "3 tirages (0 illisibles), 1/4 règles gardées, génération 43 s ; ΔR@P apparié vs gelé -0.82 pt [-2.09 ; +1.80]"
+  }
+ ],
+ "phase": "public",
+ "scale": "reduced",
+ "seed": 42,
+ "date": "2026-11-10T02:54:13+00:00",
+ "environment": {
+  "python": "3.12.16",
+  "system": "Linux-7.0.0-1019-azure-x86_64-with-glibc2.41",
+  "cpu": 4,
+  "ram_gb": 15.6,
+  "device": "cpu",
+  "gpu": null,
+  "scale": "reduced",
+  "versions": {
+   "torch": "2.15.0+cpu",
+   "transformers": "5.22.2",
+   "datasets": "5.2.0",
+   "sentence-transformers": "6.2.0",
+   "scikit-learn": "1.9.1",
+   "numpy": "2.5.4",
+   "pandas": "3.1.1",
+   "openai": "3.48.0",
+   "xgboost": "3.4.1"
+  }
+ },
+ "service_calls": {
+  "n": 0,
+  "failures": 0,
+  "seconds": 0
+ }
+}
